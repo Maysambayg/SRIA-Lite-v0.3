@@ -1,0 +1,29 @@
+{
+  "total_events": 10,
+  "action_counts": {
+    "allow": 2,
+    "block": 1,
+    "human_review": 1,
+    "queue_review": 1,
+    "session_reverify": 1,
+    "shadow_observe": 3,
+    "watch": 1
+  },
+  "reason_counts": {
+    "actor_action_novelty": 3,
+    "actor_resource_novelty": 1,
+    "graph_novelty": 19,
+    "low_history_actor": 4,
+    "missing_or_invalid_approval": 2,
+    "mission_state_contradiction": 1,
+    "new_device": 1,
+    "new_source_ip": 1,
+    "no_issue": 2,
+    "resource_frozen": 1,
+    "role_action_mismatch": 1
+  },
+  "mean_fusion_risk": 0.1727,
+  "mean_confidence": 0.5225,
+  "mean_latency_ms": 0.0288,
+  "max_fusion_risk": 0.643
+}

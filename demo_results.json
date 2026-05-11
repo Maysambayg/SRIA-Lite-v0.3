@@ -1,0 +1,207 @@
+[
+  {
+    "index": 1,
+    "label": "normal_analyst_read",
+    "event": {
+      "actor": "alice",
+      "role": "analyst",
+      "action": "read",
+      "resource": "reports",
+      "resource_criticality": 0.5,
+      "timestamp": 1778482340.406287,
+      "approval_id": null,
+      "delegation_id": null,
+      "mission_state": "normal",
+      "session_id": null,
+      "device_id": "alice_laptop",
+      "source_ip": "10.0.0.10"
+    },
+    "decision": {
+      "action": "allow",
+      "semantic_risk": 0.0,
+      "behavioral_risk": 0.004,
+      "graph_risk": 0.006,
+      "fusion_risk": 0.002,
+      "confidence": 0.994,
+      "uncertainty": 0.006,
+      "entropy": 0.459,
+      "latency_ms": 0.022,
+      "reason_codes": [
+        "no_issue"
+      ],
+      "reasons": [
+        "no material reconstruction-integrity issue detected"
+      ]
+    }
+  },
+  {
+    "index": 2,
+    "label": "unauthorized_analyst_delete",
+    "event": {
+      "actor": "alice",
+      "role": "analyst",
+      "action": "delete",
+      "resource": "reports",
+      "resource_criticality": 0.7,
+      "timestamp": 1778482340.4062886,
+      "approval_id": null,
+      "delegation_id": null,
+      "mission_state": "normal",
+      "session_id": null,
+      "device_id": "alice_laptop",
+      "source_ip": "10.0.0.10"
+    },
+    "decision": {
+      "action": "human_review",
+      "semantic_risk": 0.65,
+      "behavioral_risk": 0.204,
+      "graph_risk": 0.455,
+      "fusion_risk": 0.396,
+      "confidence": 0.472,
+      "uncertainty": 0.528,
+      "entropy": 0.473,
+      "latency_ms": 0.028,
+      "reason_codes": [
+        "role_action_mismatch",
+        "missing_or_invalid_approval",
+        "actor_action_novelty",
+        "graph_novelty",
+        "graph_novelty"
+      ],
+      "reasons": [
+        "role/action mismatch: role 'analyst' is not allowed to perform 'delete'",
+        "missing or invalid approval for sensitive action 'delete'",
+        "actor-action novelty: 'alice' rarely/never performed 'delete'",
+        "new actor-action edge: 'alice' -> 'delete'",
+        "new role-action edge: 'analyst' -> 'delete'"
+      ]
+    }
+  },
+  {
+    "index": 3,
+    "label": "engineer_deploy_during_freeze",
+    "event": {
+      "actor": "bob",
+      "role": "engineer",
+      "action": "deploy",
+      "resource": "service_b",
+      "resource_criticality": 0.9,
+      "timestamp": 1778482340.4062903,
+      "approval_id": "APPROVAL-123",
+      "delegation_id": null,
+      "mission_state": "freeze",
+      "session_id": null,
+      "device_id": "bob_laptop",
+      "source_ip": "10.0.0.20"
+    },
+    "decision": {
+      "action": "block",
+      "semantic_risk": 1.0,
+      "behavioral_risk": 0.482,
+      "graph_risk": 0.803,
+      "fusion_risk": 0.643,
+      "confidence": 0.289,
+      "uncertainty": 0.711,
+      "entropy": 0.918,
+      "latency_ms": 0.03,
+      "reason_codes": [
+        "resource_frozen",
+        "mission_state_contradiction",
+        "actor_action_novelty",
+        "actor_resource_novelty",
+        "graph_novelty",
+        "graph_novelty",
+        "graph_novelty"
+      ],
+      "reasons": [
+        "mission/freeze violation: resource 'service_b' is frozen",
+        "mission-state contradiction: non-read action during freeze state",
+        "actor-action novelty: 'bob' rarely/never performed 'deploy'",
+        "actor-resource novelty: 'bob' rarely/never accessed 'service_b'",
+        "new actor-resource edge: 'bob' -> 'service_b'",
+        "new actor-action edge: 'bob' -> 'deploy'",
+        "new role-action edge: 'engineer' -> 'deploy'"
+      ]
+    }
+  },
+  {
+    "index": 4,
+    "label": "critical_admin_grant_from_unfamiliar_context",
+    "event": {
+      "actor": "carol",
+      "role": "admin",
+      "action": "grant_admin",
+      "resource": "identity",
+      "resource_criticality": 1.0,
+      "timestamp": 1778482340.4062917,
+      "approval_id": null,
+      "delegation_id": null,
+      "mission_state": "normal",
+      "session_id": null,
+      "device_id": "unknown_device",
+      "source_ip": "203.0.113.10"
+    },
+    "decision": {
+      "action": "queue_review",
+      "semantic_risk": 0.3,
+      "behavioral_risk": 0.15,
+      "graph_risk": 0.8,
+      "fusion_risk": 0.229,
+      "confidence": 0.365,
+      "uncertainty": 0.635,
+      "entropy": 0.0,
+      "latency_ms": 0.019,
+      "reason_codes": [
+        "missing_or_invalid_approval",
+        "low_history_actor",
+        "graph_novelty",
+        "graph_novelty",
+        "graph_novelty"
+      ],
+      "reasons": [
+        "missing or invalid approval for sensitive action 'grant_admin'",
+        "new or low-history actor: limited behavioral baseline",
+        "new actor-resource edge: 'carol' -> 'identity'",
+        "new actor-action edge: 'carol' -> 'grant_admin'",
+        "new role-action edge: 'admin' -> 'grant_admin'"
+      ]
+    }
+  },
+  {
+    "index": 5,
+    "label": "known_engineer_new_device_same_resource",
+    "event": {
+      "actor": "bob",
+      "role": "engineer",
+      "action": "read",
+      "resource": "service_a",
+      "resource_criticality": 0.6,
+      "timestamp": 1778482340.4062924,
+      "approval_id": null,
+      "delegation_id": null,
+      "mission_state": "normal",
+      "session_id": null,
+      "device_id": "new_device",
+      "source_ip": "10.0.0.99"
+    },
+    "decision": {
+      "action": "session_reverify",
+      "semantic_risk": 0.0,
+      "behavioral_risk": 0.368,
+      "graph_risk": 0.026,
+      "fusion_risk": 0.113,
+      "confidence": 0.632,
+      "uncertainty": 0.368,
+      "entropy": 0.811,
+      "latency_ms": 0.022,
+      "reason_codes": [
+        "new_device",
+        "new_source_ip"
+      ],
+      "reasons": [
+        "identity-continuity concern: new device 'new_device'",
+        "identity-continuity concern: new source IP '10.0.0.99'"
+      ]
+    }
+  }
+]

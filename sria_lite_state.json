@@ -1,0 +1,786 @@
+{
+  "version": "sria_lite_v0.3",
+  "config": {
+    "alpha_semantic": 0.45,
+    "beta_behavioral": 0.3,
+    "gamma_agreement": 0.1,
+    "delta_graph": 0.15,
+    "suspicion_decay": 0.85,
+    "profile_risk_decay": 0.9,
+    "baseline_entropy_decay": 0.97,
+    "history_window": 50,
+    "entropy_window": 20,
+    "entropy_shift_threshold": 0.35,
+    "context_entropy_shift_threshold": 0.3,
+    "graph_novelty_threshold": 0.45,
+    "shadow_fusion_min": 0.25,
+    "shadow_fusion_max": 0.45,
+    "step_up_fusion_threshold": 0.3,
+    "queue_review_threshold": 0.5,
+    "human_review_threshold": 0.7,
+    "high_criticality_threshold": 0.8,
+    "audit_log_limit": 1000
+  },
+  "policy": {
+    "role_actions": {
+      "analyst": [
+        "export",
+        "read"
+      ],
+      "engineer": [
+        "deploy",
+        "read"
+      ],
+      "admin": [
+        "delete",
+        "deploy",
+        "grant_admin",
+        "read"
+      ],
+      "auditor": [
+        "audit",
+        "read"
+      ]
+    },
+    "role_resources": {
+      "analyst": [
+        "metrics",
+        "reports"
+      ],
+      "engineer": [
+        "service_a",
+        "service_b"
+      ],
+      "admin": [
+        "*"
+      ],
+      "auditor": [
+        "logs",
+        "reports"
+      ]
+    },
+    "frozen_resources": [
+      "service_b"
+    ],
+    "required_approval_actions": [
+      "delete",
+      "deploy",
+      "export",
+      "grant_admin"
+    ],
+    "active_approvals": [
+      "APPROVAL-123"
+    ],
+    "active_delegations": [
+      "DEL-OK"
+    ]
+  },
+  "profiles": {
+    "alice": {
+      "known_roles": [
+        "analyst"
+      ],
+      "known_actions": [
+        "delete",
+        "export",
+        "read"
+      ],
+      "known_resources": [
+        "reports"
+      ],
+      "known_devices": [
+        "alice_laptop"
+      ],
+      "known_ips": [
+        "10.0.0.10"
+      ],
+      "recent_actions": [
+        "read",
+        "export",
+        "read",
+        "delete"
+      ],
+      "recent_resources": [
+        "reports",
+        "reports",
+        "reports",
+        "reports"
+      ],
+      "event_count": 4,
+      "recent_risk": 0.053770795052656556,
+      "baseline_entropy": 0.4731973151785931
+    },
+    "bob": {
+      "known_roles": [
+        "engineer"
+      ],
+      "known_actions": [
+        "deploy",
+        "read"
+      ],
+      "known_resources": [
+        "service_a",
+        "service_b"
+      ],
+      "known_devices": [
+        "bob_laptop",
+        "new_device"
+      ],
+      "known_ips": [
+        "10.0.0.20",
+        "10.0.0.99"
+      ],
+      "recent_actions": [
+        "read",
+        "read",
+        "deploy",
+        "read"
+      ],
+      "recent_resources": [
+        "service_a",
+        "service_a",
+        "service_b",
+        "service_a"
+      ],
+      "event_count": 4,
+      "recent_risk": 0.07514676307857837,
+      "baseline_entropy": 0.8112781244591328
+    },
+    "dina": {
+      "known_roles": [
+        "auditor"
+      ],
+      "known_actions": [
+        "audit"
+      ],
+      "known_resources": [
+        "logs"
+      ],
+      "known_devices": [
+        "dina_laptop"
+      ],
+      "known_ips": [
+        "10.0.0.30"
+      ],
+      "recent_actions": [
+        "audit"
+      ],
+      "recent_resources": [
+        "logs"
+      ],
+      "event_count": 1,
+      "recent_risk": 0.008069999999999997,
+      "baseline_entropy": 0.0
+    },
+    "carol": {
+      "known_roles": [
+        "admin"
+      ],
+      "known_actions": [
+        "grant_admin"
+      ],
+      "known_resources": [
+        "identity"
+      ],
+      "known_devices": [
+        "unknown_device"
+      ],
+      "known_ips": [
+        "203.0.113.10"
+      ],
+      "recent_actions": [
+        "grant_admin"
+      ],
+      "recent_resources": [
+        "identity"
+      ],
+      "event_count": 1,
+      "recent_risk": 0.022927499999999996,
+      "baseline_entropy": 0.0
+    }
+  },
+  "context_profiles": {
+    "alice|analyst|reports": {
+      "recent_actions": [
+        "read",
+        "export",
+        "read",
+        "delete"
+      ],
+      "recent_resources": [
+        "reports",
+        "reports",
+        "reports",
+        "reports"
+      ],
+      "baseline_entropy": 0.4731973151785931,
+      "event_count": 4
+    },
+    "bob|engineer|service_a": {
+      "recent_actions": [
+        "read",
+        "read",
+        "read"
+      ],
+      "recent_resources": [
+        "service_a",
+        "service_a",
+        "service_a"
+      ],
+      "baseline_entropy": 0.0,
+      "event_count": 3
+    },
+    "dina|auditor|logs": {
+      "recent_actions": [
+        "audit"
+      ],
+      "recent_resources": [
+        "logs"
+      ],
+      "baseline_entropy": 0.0,
+      "event_count": 1
+    },
+    "bob|engineer|service_b": {
+      "recent_actions": [
+        "deploy"
+      ],
+      "recent_resources": [
+        "service_b"
+      ],
+      "baseline_entropy": 0.0,
+      "event_count": 1
+    },
+    "carol|admin|identity": {
+      "recent_actions": [
+        "grant_admin"
+      ],
+      "recent_resources": [
+        "identity"
+      ],
+      "baseline_entropy": 0.0,
+      "event_count": 1
+    }
+  },
+  "graph": {
+    "actor_resource_edges": [
+      {
+        "left": "alice",
+        "right": "reports",
+        "count": 4
+      },
+      {
+        "left": "bob",
+        "right": "service_a",
+        "count": 3
+      },
+      {
+        "left": "dina",
+        "right": "logs",
+        "count": 1
+      },
+      {
+        "left": "bob",
+        "right": "service_b",
+        "count": 1
+      },
+      {
+        "left": "carol",
+        "right": "identity",
+        "count": 1
+      }
+    ],
+    "actor_action_edges": [
+      {
+        "left": "alice",
+        "right": "read",
+        "count": 2
+      },
+      {
+        "left": "alice",
+        "right": "export",
+        "count": 1
+      },
+      {
+        "left": "bob",
+        "right": "read",
+        "count": 3
+      },
+      {
+        "left": "dina",
+        "right": "audit",
+        "count": 1
+      },
+      {
+        "left": "alice",
+        "right": "delete",
+        "count": 1
+      },
+      {
+        "left": "bob",
+        "right": "deploy",
+        "count": 1
+      },
+      {
+        "left": "carol",
+        "right": "grant_admin",
+        "count": 1
+      }
+    ],
+    "role_action_edges": [
+      {
+        "left": "analyst",
+        "right": "read",
+        "count": 2
+      },
+      {
+        "left": "analyst",
+        "right": "export",
+        "count": 1
+      },
+      {
+        "left": "engineer",
+        "right": "read",
+        "count": 3
+      },
+      {
+        "left": "auditor",
+        "right": "audit",
+        "count": 1
+      },
+      {
+        "left": "analyst",
+        "right": "delete",
+        "count": 1
+      },
+      {
+        "left": "engineer",
+        "right": "deploy",
+        "count": 1
+      },
+      {
+        "left": "admin",
+        "right": "grant_admin",
+        "count": 1
+      }
+    ],
+    "suspicion_by_actor": {
+      "alice": 0.07793194957124447,
+      "bob": 0.10649103141903461,
+      "dina": 0.012105000000000001,
+      "carol": 0.034391250000000005
+    }
+  },
+  "metrics": {
+    "total_events": 10,
+    "action_counts": {
+      "allow": 2,
+      "block": 1,
+      "human_review": 1,
+      "queue_review": 1,
+      "session_reverify": 1,
+      "shadow_observe": 3,
+      "watch": 1
+    },
+    "reason_counts": {
+      "actor_action_novelty": 3,
+      "actor_resource_novelty": 1,
+      "graph_novelty": 19,
+      "low_history_actor": 4,
+      "missing_or_invalid_approval": 2,
+      "mission_state_contradiction": 1,
+      "new_device": 1,
+      "new_source_ip": 1,
+      "no_issue": 2,
+      "resource_frozen": 1,
+      "role_action_mismatch": 1
+    },
+    "mean_fusion_risk": 0.1727,
+    "mean_confidence": 0.5225,
+    "mean_latency_ms": 0.0288,
+    "max_fusion_risk": 0.643
+  },
+  "audit_log": [
+    {
+      "event": {
+        "actor": "alice",
+        "role": "analyst",
+        "action": "read",
+        "resource": "reports",
+        "resource_criticality": 0.5,
+        "timestamp": 1778482340.406015,
+        "approval_id": null,
+        "delegation_id": null,
+        "mission_state": "normal",
+        "session_id": null,
+        "device_id": "alice_laptop",
+        "source_ip": "10.0.0.10"
+      },
+      "decision": {
+        "action": "shadow_observe",
+        "semantic_risk": 0.0,
+        "behavioral_risk": 0.15,
+        "graph_risk": 0.8,
+        "fusion_risk": 0.081,
+        "confidence": 0.297,
+        "uncertainty": 0.703,
+        "entropy": 0.0,
+        "latency_ms": 0.057,
+        "reason_codes": [
+          "low_history_actor",
+          "graph_novelty",
+          "graph_novelty",
+          "graph_novelty"
+        ],
+        "reasons": [
+          "new or low-history actor: limited behavioral baseline",
+          "new actor-resource edge: 'alice' -> 'reports'",
+          "new actor-action edge: 'alice' -> 'read'",
+          "new role-action edge: 'analyst' -> 'read'"
+        ]
+      }
+    },
+    {
+      "event": {
+        "actor": "alice",
+        "role": "analyst",
+        "action": "export",
+        "resource": "reports",
+        "resource_criticality": 0.5,
+        "timestamp": 1778482340.4060187,
+        "approval_id": "APPROVAL-123",
+        "delegation_id": null,
+        "mission_state": "normal",
+        "session_id": null,
+        "device_id": "alice_laptop",
+        "source_ip": "10.0.0.10"
+      },
+      "decision": {
+        "action": "watch",
+        "semantic_risk": 0.0,
+        "behavioral_risk": 0.202,
+        "graph_risk": 0.453,
+        "fusion_risk": 0.1,
+        "confidence": 0.585,
+        "uncertainty": 0.415,
+        "entropy": 0.5,
+        "latency_ms": 0.052,
+        "reason_codes": [
+          "actor_action_novelty",
+          "graph_novelty",
+          "graph_novelty"
+        ],
+        "reasons": [
+          "actor-action novelty: 'alice' rarely/never performed 'export'",
+          "new actor-action edge: 'alice' -> 'export'",
+          "new role-action edge: 'analyst' -> 'export'"
+        ]
+      }
+    },
+    {
+      "event": {
+        "actor": "bob",
+        "role": "engineer",
+        "action": "read",
+        "resource": "service_a",
+        "resource_criticality": 0.5,
+        "timestamp": 1778482340.4060206,
+        "approval_id": null,
+        "delegation_id": null,
+        "mission_state": "normal",
+        "session_id": null,
+        "device_id": "bob_laptop",
+        "source_ip": "10.0.0.20"
+      },
+      "decision": {
+        "action": "shadow_observe",
+        "semantic_risk": 0.0,
+        "behavioral_risk": 0.15,
+        "graph_risk": 0.8,
+        "fusion_risk": 0.081,
+        "confidence": 0.297,
+        "uncertainty": 0.703,
+        "entropy": 0.0,
+        "latency_ms": 0.02,
+        "reason_codes": [
+          "low_history_actor",
+          "graph_novelty",
+          "graph_novelty",
+          "graph_novelty"
+        ],
+        "reasons": [
+          "new or low-history actor: limited behavioral baseline",
+          "new actor-resource edge: 'bob' -> 'service_a'",
+          "new actor-action edge: 'bob' -> 'read'",
+          "new role-action edge: 'engineer' -> 'read'"
+        ]
+      }
+    },
+    {
+      "event": {
+        "actor": "bob",
+        "role": "engineer",
+        "action": "read",
+        "resource": "service_a",
+        "resource_criticality": 0.5,
+        "timestamp": 1778482340.4060216,
+        "approval_id": null,
+        "delegation_id": null,
+        "mission_state": "normal",
+        "session_id": null,
+        "device_id": "bob_laptop",
+        "source_ip": "10.0.0.20"
+      },
+      "decision": {
+        "action": "allow",
+        "semantic_risk": 0.0,
+        "behavioral_risk": 0.002,
+        "graph_risk": 0.003,
+        "fusion_risk": 0.001,
+        "confidence": 0.997,
+        "uncertainty": 0.003,
+        "entropy": 0.0,
+        "latency_ms": 0.021,
+        "reason_codes": [
+          "no_issue"
+        ],
+        "reasons": [
+          "no material reconstruction-integrity issue detected"
+        ]
+      }
+    },
+    {
+      "event": {
+        "actor": "dina",
+        "role": "auditor",
+        "action": "audit",
+        "resource": "logs",
+        "resource_criticality": 0.5,
+        "timestamp": 1778482340.4060225,
+        "approval_id": null,
+        "delegation_id": null,
+        "mission_state": "normal",
+        "session_id": null,
+        "device_id": "dina_laptop",
+        "source_ip": "10.0.0.30"
+      },
+      "decision": {
+        "action": "shadow_observe",
+        "semantic_risk": 0.0,
+        "behavioral_risk": 0.15,
+        "graph_risk": 0.8,
+        "fusion_risk": 0.081,
+        "confidence": 0.297,
+        "uncertainty": 0.703,
+        "entropy": 0.0,
+        "latency_ms": 0.017,
+        "reason_codes": [
+          "low_history_actor",
+          "graph_novelty",
+          "graph_novelty",
+          "graph_novelty"
+        ],
+        "reasons": [
+          "new or low-history actor: limited behavioral baseline",
+          "new actor-resource edge: 'dina' -> 'logs'",
+          "new actor-action edge: 'dina' -> 'audit'",
+          "new role-action edge: 'auditor' -> 'audit'"
+        ]
+      }
+    },
+    {
+      "event": {
+        "actor": "alice",
+        "role": "analyst",
+        "action": "read",
+        "resource": "reports",
+        "resource_criticality": 0.5,
+        "timestamp": 1778482340.406287,
+        "approval_id": null,
+        "delegation_id": null,
+        "mission_state": "normal",
+        "session_id": null,
+        "device_id": "alice_laptop",
+        "source_ip": "10.0.0.10"
+      },
+      "decision": {
+        "action": "allow",
+        "semantic_risk": 0.0,
+        "behavioral_risk": 0.004,
+        "graph_risk": 0.006,
+        "fusion_risk": 0.002,
+        "confidence": 0.994,
+        "uncertainty": 0.006,
+        "entropy": 0.459,
+        "latency_ms": 0.022,
+        "reason_codes": [
+          "no_issue"
+        ],
+        "reasons": [
+          "no material reconstruction-integrity issue detected"
+        ]
+      }
+    },
+    {
+      "event": {
+        "actor": "alice",
+        "role": "analyst",
+        "action": "delete",
+        "resource": "reports",
+        "resource_criticality": 0.7,
+        "timestamp": 1778482340.4062886,
+        "approval_id": null,
+        "delegation_id": null,
+        "mission_state": "normal",
+        "session_id": null,
+        "device_id": "alice_laptop",
+        "source_ip": "10.0.0.10"
+      },
+      "decision": {
+        "action": "human_review",
+        "semantic_risk": 0.65,
+        "behavioral_risk": 0.204,
+        "graph_risk": 0.455,
+        "fusion_risk": 0.396,
+        "confidence": 0.472,
+        "uncertainty": 0.528,
+        "entropy": 0.473,
+        "latency_ms": 0.028,
+        "reason_codes": [
+          "role_action_mismatch",
+          "missing_or_invalid_approval",
+          "actor_action_novelty",
+          "graph_novelty",
+          "graph_novelty"
+        ],
+        "reasons": [
+          "role/action mismatch: role 'analyst' is not allowed to perform 'delete'",
+          "missing or invalid approval for sensitive action 'delete'",
+          "actor-action novelty: 'alice' rarely/never performed 'delete'",
+          "new actor-action edge: 'alice' -> 'delete'",
+          "new role-action edge: 'analyst' -> 'delete'"
+        ]
+      }
+    },
+    {
+      "event": {
+        "actor": "bob",
+        "role": "engineer",
+        "action": "deploy",
+        "resource": "service_b",
+        "resource_criticality": 0.9,
+        "timestamp": 1778482340.4062903,
+        "approval_id": "APPROVAL-123",
+        "delegation_id": null,
+        "mission_state": "freeze",
+        "session_id": null,
+        "device_id": "bob_laptop",
+        "source_ip": "10.0.0.20"
+      },
+      "decision": {
+        "action": "block",
+        "semantic_risk": 1.0,
+        "behavioral_risk": 0.482,
+        "graph_risk": 0.803,
+        "fusion_risk": 0.643,
+        "confidence": 0.289,
+        "uncertainty": 0.711,
+        "entropy": 0.918,
+        "latency_ms": 0.03,
+        "reason_codes": [
+          "resource_frozen",
+          "mission_state_contradiction",
+          "actor_action_novelty",
+          "actor_resource_novelty",
+          "graph_novelty",
+          "graph_novelty",
+          "graph_novelty"
+        ],
+        "reasons": [
+          "mission/freeze violation: resource 'service_b' is frozen",
+          "mission-state contradiction: non-read action during freeze state",
+          "actor-action novelty: 'bob' rarely/never performed 'deploy'",
+          "actor-resource novelty: 'bob' rarely/never accessed 'service_b'",
+          "new actor-resource edge: 'bob' -> 'service_b'",
+          "new actor-action edge: 'bob' -> 'deploy'",
+          "new role-action edge: 'engineer' -> 'deploy'"
+        ]
+      }
+    },
+    {
+      "event": {
+        "actor": "carol",
+        "role": "admin",
+        "action": "grant_admin",
+        "resource": "identity",
+        "resource_criticality": 1.0,
+        "timestamp": 1778482340.4062917,
+        "approval_id": null,
+        "delegation_id": null,
+        "mission_state": "normal",
+        "session_id": null,
+        "device_id": "unknown_device",
+        "source_ip": "203.0.113.10"
+      },
+      "decision": {
+        "action": "queue_review",
+        "semantic_risk": 0.3,
+        "behavioral_risk": 0.15,
+        "graph_risk": 0.8,
+        "fusion_risk": 0.229,
+        "confidence": 0.365,
+        "uncertainty": 0.635,
+        "entropy": 0.0,
+        "latency_ms": 0.019,
+        "reason_codes": [
+          "missing_or_invalid_approval",
+          "low_history_actor",
+          "graph_novelty",
+          "graph_novelty",
+          "graph_novelty"
+        ],
+        "reasons": [
+          "missing or invalid approval for sensitive action 'grant_admin'",
+          "new or low-history actor: limited behavioral baseline",
+          "new actor-resource edge: 'carol' -> 'identity'",
+          "new actor-action edge: 'carol' -> 'grant_admin'",
+          "new role-action edge: 'admin' -> 'grant_admin'"
+        ]
+      }
+    },
+    {
+      "event": {
+        "actor": "bob",
+        "role": "engineer",
+        "action": "read",
+        "resource": "service_a",
+        "resource_criticality": 0.6,
+        "timestamp": 1778482340.4062924,
+        "approval_id": null,
+        "delegation_id": null,
+        "mission_state": "normal",
+        "session_id": null,
+        "device_id": "new_device",
+        "source_ip": "10.0.0.99"
+      },
+      "decision": {
+        "action": "session_reverify",
+        "semantic_risk": 0.0,
+        "behavioral_risk": 0.368,
+        "graph_risk": 0.026,
+        "fusion_risk": 0.113,
+        "confidence": 0.632,
+        "uncertainty": 0.368,
+        "entropy": 0.811,
+        "latency_ms": 0.022,
+        "reason_codes": [
+          "new_device",
+          "new_source_ip"
+        ],
+        "reasons": [
+          "identity-continuity concern: new device 'new_device'",
+          "identity-continuity concern: new source IP '10.0.0.99'"
+        ]
+      }
+    }
+  ]
+}
