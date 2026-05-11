@@ -3,7 +3,8 @@
 **Semantic Reconstruction Integrity Architecture — compact defensive decision-governance prototype**
 
 SRIA Lite v0.3 is a small, runnable Python scaffold that demonstrates the practical decision-governance loop described in the SRIA v3.0 paper.
-
+Status: Alpha research prototype.
+SRIA Lite v0.3 is provided for review, experimentation, and noncommercial evaluation. It is not production software and does not reproduce the full SRIA v3.0 benchmark pipeline.
 It is **not** the full SRIA v3.0 benchmark pipeline and it is **not** a production security system. It is a defensive research prototype meant to show how SRIA-style components can be represented in code.
 
 ## What this prototype demonstrates
