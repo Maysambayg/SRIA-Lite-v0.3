@@ -1,9 +1,9 @@
 """
-Runnable demo for SRIA Lite v0.3.
+Runnable demo for SRIA Lite v0.6.
 
 This script demonstrates the defensive decision-governance loop:
-semantic checks + behavioral memory + graph novelty + confidence-gated fusion
-+ proportional action selection.
+semantic checks + behavioral memory + graph novelty + provenance-chain validation
++ confidence-gated fusion + proportional action selection with cost scoring.
 
 Run:
     python demo_sria_lite.py
@@ -19,7 +19,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from sria_lite_v03 import (
+from sria_lite_v06 import (
     Event,
     MissionState,
     PolicyState,
@@ -176,7 +176,7 @@ def main() -> None:
     engine = build_engine()
     results = []
 
-    print("\nSRIA Lite v0.3 demo")
+    print("\nSRIA Lite v0.6 demo")
     print("=" * 72)
 
     for idx, (label, event) in enumerate(scenario_events(), start=1):
@@ -191,12 +191,13 @@ def main() -> None:
 
         print(f"\n[{idx}] {label}")
         print(f"    actor={event.actor} role={event.role} action={event.action} resource={event.resource}")
-        print(f"    action={decision.action.value}")
+        print(f"    action={decision.action.value} (cost={decision.action_cost:.2f})")
         print(
             "    scores="
             f"semantic:{decision.semantic_risk:.3f} "
             f"behavioral:{decision.behavioral_risk:.3f} "
             f"graph:{decision.graph_risk:.3f} "
+            f"provenance:{decision.provenance_risk:.3f} "
             f"fusion:{decision.fusion_risk:.3f} "
             f"confidence:{decision.confidence:.3f} "
             f"uncertainty:{decision.uncertainty:.3f}"

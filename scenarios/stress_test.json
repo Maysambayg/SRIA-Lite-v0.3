@@ -1,0 +1,41 @@
+{
+  "policy": {
+    "role_actions": {
+      "analyst": ["read", "export"],
+      "engineer": ["read", "deploy"],
+      "admin": ["read", "deploy", "delete", "grant_admin"],
+      "auditor": ["read", "audit"]
+    },
+    "role_resources": {
+      "analyst": ["reports", "metrics"],
+      "engineer": ["service_a", "service_b", "service_c"],
+      "admin": ["*"],
+      "auditor": ["reports", "logs"]
+    },
+    "frozen_resources": ["service_b", "service_c"],
+    "required_approval_actions": ["deploy", "delete", "export", "grant_admin"],
+    "active_approvals": ["APPROVAL-100"],
+    "active_delegations": ["DEL-1"]
+  },
+  "baseline_events": [
+    {"actor": "user_a", "role": "analyst", "action": "read", "resource": "reports", "device_id": "dev_a", "source_ip": "10.0.0.1"},
+    {"actor": "user_a", "role": "analyst", "action": "read", "resource": "metrics", "device_id": "dev_a", "source_ip": "10.0.0.1"},
+    {"actor": "user_b", "role": "engineer", "action": "read", "resource": "service_a", "device_id": "dev_b", "source_ip": "10.0.0.2"},
+    {"actor": "user_b", "role": "engineer", "action": "read", "resource": "service_a", "device_id": "dev_b", "source_ip": "10.0.0.2"},
+    {"actor": "user_b", "role": "engineer", "action": "read", "resource": "service_a", "device_id": "dev_b", "source_ip": "10.0.0.2"},
+    {"actor": "user_c", "role": "auditor", "action": "audit", "resource": "logs", "device_id": "dev_c", "source_ip": "10.0.0.3"},
+    {"actor": "user_d", "role": "admin", "action": "read", "resource": "reports", "device_id": "dev_d", "source_ip": "10.0.0.4"}
+  ],
+  "events": [
+    {"label": "normal_read", "actor": "user_a", "role": "analyst", "action": "read", "resource": "reports", "device_id": "dev_a", "source_ip": "10.0.0.1"},
+    {"label": "analyst_tries_deploy", "actor": "user_a", "role": "analyst", "action": "deploy", "resource": "service_a", "resource_criticality": 0.8, "device_id": "dev_a", "source_ip": "10.0.0.1"},
+    {"label": "unknown_actor_admin_grant", "actor": "intruder_x", "role": "admin", "action": "grant_admin", "resource": "identity", "resource_criticality": 1.0, "device_id": "unknown", "source_ip": "203.0.113.50"},
+    {"label": "engineer_frozen_deploy_no_approval", "actor": "user_b", "role": "engineer", "action": "deploy", "resource": "service_c", "resource_criticality": 0.95, "mission_state": "freeze", "device_id": "dev_b", "source_ip": "10.0.0.2"},
+    {"label": "admin_delete_with_approval", "actor": "user_d", "role": "admin", "action": "delete", "resource": "reports", "resource_criticality": 0.7, "approval_id": "APPROVAL-100", "device_id": "dev_d", "source_ip": "10.0.0.4"},
+    {"label": "engineer_new_device", "actor": "user_b", "role": "engineer", "action": "read", "resource": "service_a", "device_id": "new_laptop", "source_ip": "192.168.1.100"},
+    {"label": "auditor_tries_delete", "actor": "user_c", "role": "auditor", "action": "delete", "resource": "logs", "resource_criticality": 0.6, "device_id": "dev_c", "source_ip": "10.0.0.3"},
+    {"label": "invalid_delegation", "actor": "user_a", "role": "analyst", "action": "export", "resource": "reports", "delegation_id": "DEL-FAKE", "device_id": "dev_a", "source_ip": "10.0.0.1"},
+    {"label": "admin_from_external_ip", "actor": "user_d", "role": "admin", "action": "grant_admin", "resource": "identity", "resource_criticality": 1.0, "device_id": "dev_d", "source_ip": "203.0.113.99"},
+    {"label": "normal_audit", "actor": "user_c", "role": "auditor", "action": "read", "resource": "reports", "device_id": "dev_c", "source_ip": "10.0.0.3"}
+  ]
+}

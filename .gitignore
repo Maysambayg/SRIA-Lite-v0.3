@@ -1,0 +1,25 @@
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Generated output files
+demo_results.json
+demo_metrics.json
+sria_lite_state.json
+ingest_results.json
+scenario_results.json
+scenario_metrics.json
+benchmark_results.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# pytest
+.pytest_cache/
