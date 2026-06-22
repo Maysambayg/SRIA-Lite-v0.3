@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SRIA RT — System Card</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+  :root {
+    --bg:        #0d0f0f;
+    --surface:   #141718;
+    --border:    #242828;
+    --border-hi: #2e3535;
+    --text:      #c8d0ce;
+    --text-dim:  #5a6464;
+    --text-hi:   #e8f0ee;
+    --accent:    #3dada0;
+    --accent-dim:#1e5550;
+    --warn:      #a0703d;
+    --warn-dim:  #3d2a18;
+    --ok:        #5a8a5a;
+    --ok-dim:    #1e331e;
+    --mono:      'IBM Plex Mono', monospace;
+    --sans:      'IBM Plex Sans', system-ui, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { font-size: 15px; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ── Layout ── */
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 60px 40px 100px;
+  }
+
+  /* ── Header ── */
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 36px;
+    margin-bottom: 52px;
+  }
+
+  .header-tag {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .header h1 {
+    font-family: var(--mono);
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: var(--text-hi);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+
+  .header-sub {
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-bottom: 24px;
+  }
+
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 24px;
+  }
+
+  .meta-cell {
+    background: var(--surface);
+    padding: 12px 16px;
+  }
+
+  .meta-label {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .meta-value {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--text-hi);
+  }
+
+  /* ── Sections ── */
+  .section {
+    margin-bottom: 52px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-id {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    flex-shrink: 0;
+  }
+
+  .section h2 {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-hi);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  p {
+    font-size: 0.92rem;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+
+  p:last-child { margin-bottom: 0; }
+
+  /* ── Metrics table ── */
+  .metrics {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    margin: 20px 0;
+  }
+
+  .metrics thead tr {
+    background: var(--border);
+  }
+
+  .metrics th {
+    text-align: left;
+    padding: 8px 14px;
+    color: var(--text-dim);
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .metrics td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+  }
+
+  .metrics tr:hover td { background: var(--surface); }
+
+  .val-hi  { color: var(--accent); font-weight: 500; }
+  .val-dim { color: var(--text-dim); }
+  .val-warn{ color: var(--warn); }
+
+  /* ── Callout boxes ── */
+  .callout {
+    border-left: 2px solid var(--accent-dim);
+    background: var(--surface);
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 0.88rem;
+  }
+
+  .callout.warn {
+    border-left-color: var(--warn);
+    background: var(--warn-dim);
+  }
+
+  .callout.ok {
+    border-left-color: var(--ok);
+    background: var(--ok-dim);
+  }
+
+  .callout-label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .callout.warn .callout-label { color: var(--warn); }
+  .callout.ok  .callout-label { color: var(--ok); }
+
+  /* ── Signal list ── */
+  .signal-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 16px 0;
+  }
+
+  .signal-tag {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    padding: 4px 10px;
+    background: var(--surface);
+    border: 1px solid var(--border-hi);
+    color: var(--text);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Status table ── */
+  .status-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    margin: 16px 0;
+  }
+
+  .status-table td {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  .status-table td:first-child {
+    color: var(--text-dim);
+    font-size: 0.82rem;
+    width: 52%;
+    padding-right: 20px;
+  }
+
+  .status-table td:last-child {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+  }
+
+  .status-confirmed { color: var(--ok); }
+  .status-unknown   { color: var(--warn); }
+  .status-future    { color: var(--text-dim); }
+
+  /* ── Artifact list ── */
+  .artifact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin: 16px 0;
+  }
+
+  .artifact-row {
+    background: var(--surface);
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .artifact-name {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--text);
+  }
+
+  .artifact-status {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  .st-complete { color: var(--ok); }
+  .st-next     { color: var(--warn); }
+  .st-preserved{ color: var(--accent); }
+
+  /* ── Footer ── */
+  .footer {
+    margin-top: 72px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    .page { padding: 40px 20px 60px; }
+    .footer { flex-direction: column; }
+    .artifact-row { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <header class="header">
+    <span class="header-tag">System Card — Research Prototype</span>
+    <h1>SRIA RT<br>Authentication Lateral-Movement Detector</h1>
+    <div class="header-sub">Staged Reconstruction Integrity Architecture — Authentication Track</div>
+
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <span class="meta-label">Author</span>
+        <span class="meta-value">Maysam Bayg Muhammady</span>
+      </div>
+      <div class="meta-cell">
+        <span class="meta-label">Affiliation</span>
+        <span class="meta-value">Independent / AWOS AI</span>
+      </div>
+      <div class="meta-cell">
+        <span class="meta-label">Version</span>
+        <span class="meta-value">v0.5.5</span>
+      </div>
+      <div class="meta-cell">
+        <span class="meta-label">Date</span>
+        <span class="meta-value">June 2026</span>
+      </div>
+      <div class="meta-cell">
+        <span class="meta-label">Status</span>
+        <span class="meta-value" style="color:var(--warn)">Research Prototype</span>
+      </div>
+      <div class="meta-cell">
+        <span class="meta-label">Dataset</span>
+        <span class="meta-value">LANL Auth + Host/Network</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- S1: WHAT IT DOES -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-id">01</span>
+      <h2>What this system does</h2>
+    </div>
+    <p>SRIA RT is a pipeline for detecting lateral-movement behavior in enterprise authentication telemetry using graph-structural features rather than signature matching. It does not look for known malware names, process lists, or static indicators. It looks for patterns in how authentication events connect — source hosts, destination hosts, users, timing, and novelty — that are structurally consistent with lateral movement even when individual events appear benign.</p>
+    <p>The pipeline produces a ranked analyst review queue: a prioritized list of suspicious authentication episodes for human examination. It is not an automated blocking system. Every output is intended for analyst review, not autonomous action.</p>
+
+    <div class="callout">
+      <span class="callout-label">Core hypothesis</span>
+      Real lateral movement leaves graph-structural traces — first-time edges, fanout patterns, compact bursts — even when static indicators are unavailable. SRIA RT tests that hypothesis.
+    </div>
+  </section>
+
+  <!-- S2: WHAT IT IS NOT -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-id">02</span>
+      <h2>What this system is not</h2>
+    </div>
+
+    <div class="callout warn">
+      <span class="callout-label">Critical boundary</span>
+      This is a research prototype validated on one dataset under specific conditions. It is not a deployed security product. Do not use it to make autonomous blocking or containment decisions.
+    </div>
+
+    <table class="status-table">
+      <tr><td>A general-purpose intrusion detection system</td><td class="status-unknown">✗ Not claimed</td></tr>
+      <tr><td>Validated on real enterprise telemetry</td><td class="status-unknown">✗ Not yet</td></tr>
+      <tr><td>Capable of deployment precision claims</td><td class="status-unknown">✗ Not yet</td></tr>
+      <tr><td>A replacement for SIEM, EDR, or UEBA</td><td class="status-unknown">✗ Not claimed</td></tr>
+      <tr><td>Validated outside the LANL dataset</td><td class="status-unknown">✗ Unknown</td></tr>
+      <tr><td>A system that blocks or contains autonomously</td><td class="status-unknown">✗ By design</td></tr>
+    </table>
+  </section>
+
+  <!-- S3: DATA -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-id">03</span>
+      <h2>Training and evaluation data</h2>
+    </div>
+    <p>All validation used the LANL Unified Host and Network Dataset (Turcotte, Kent &amp; Hash, 2018) and the LANL authentication dataset with red-team ground-truth labels.</p>
+
+    <table class="metrics">
+      <thead>
+        <tr>
+          <th>Property</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Authentication lines scanned</td><td class="val-hi">1,051,430,459</td></tr>
+        <tr><td>Host/network events (Day 60 + Day 90)</td><td class="val-hi">467,629,414</td></tr>
+        <tr><td>Accepted candidate episodes (auth)</td><td class="val-hi">73,546</td></tr>
+        <tr><td>Red-team events in validation set</td><td class="val-hi">749 total / 138 represented</td></tr>
+        <tr><td>Evaluation scope</td><td class="val-warn">Sparse red-team windows only</td></tr>
+        <tr><td>Negative background evaluation</td><td class="val-warn">Not yet completed</td></tr>
+        <tr><td>Ground-truth source</td><td>redteam.txt (post-hoc validation only)</td></tr>
+        <tr><td>Red-team labels used in scoring</td><td class="val-hi">No — labels withheld from detector</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout warn">
+      <span class="callout-label">Leakage discipline</span>
+      Red-team source, destination, and user labels were withheld from the detector throughout. The scoring path used only authentication-derived structural features. Ground-truth labels were used only for post-hoc validation.
+    </div>
+  </section>
+
+  <!-- S4: ARCHITECTURE -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-id">04</span>
+      <h2>Architecture</h2>
+    </div>
+    <p>The pipeline operates in three layers. The feature engine extracts structural signals from authentication topology. The learned ranker orders accepted episodes by likelihood of containing lateral movement. The packaging layer organizes ranked output into analyst-readable review queues grouped by source cluster.</p>
+
+    <table class="metrics">
+      <thead>
+        <tr><th>Layer</th><th>Component</th><th>Role</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1 — Feature Engine</td><td>SRIA authentication topology</td><td>Extracts graph-structural signals from auth events</td></tr>
+        <tr><td>2 — Candidate Gates</td><td>Hand-written gate logic</td><td>Generates accepted episode candidates; not the final ranker</td></tr>
+        <tr><td>3 — Learned Ranker</td><td>rf_depth10_cw_none</td><td>Ranks accepted episodes by lateral-movement likelihood</td></tr>
+        <tr><td>4 — Output Layer</td><td>Deployment queue + cluster packaging</td><td>Analyst-readable review queues grouped by source</td></tr>
+      </tbody>
+    </table>
+
+    <p>The hand-written gate score is not the final ranking authority. After leakage-corrected baseline comparison, the learned ranker (RF depth-10, trained on v0.3.3, scored on v0.3.6) consistently outperformed the hand score. The hand gates remain useful as candidate generators and explanation metadata, not as ranking logic.</p>
+
+    <div class="signal-list">
+      <span class="signal-tag">first_time_source_user_to_dest</span>
+      <span class="signal-tag">first_time_user_to_dest</span>
+      <span class="signal-tag">first_time_source_to_dest</span>
+      <span class="signal-tag">source_fanout</span>
+      <span class="signal-tag">user_fanout</span>
+      <span class="signal-tag">source_user_fanout</span>
+      <span class="signal-tag">compact_lateral_burst</span>
+      <span class="signal-tag">fanout_velocity</span>
+      <span class="signal-tag">novelty_ratio</span>
+      <span class="signal-tag">compactness_score</span>
+      <span class="signal-tag">entropy_soft_duration</span>
+      <span class="signal-tag">propagation_convergence_bonus</span>
+    </div>
+  </section>
+
+  <!-- S5: PERFORMANCE -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-id">05</span>
+      <h2>Performance — accepted-episode review queue</h2>
+    </div>
+
+    <div class="callout warn">
+      <span class="callout-label">Scope of these metrics</span>
+      All metrics below are computed over the accepted-episode candidate population only. They measure review-queue ranking quality, not deployment precision across full enterprise background traffic. Negative-background evaluation has not been completed.
+    </div>
+
+    <table class="metrics">
+      <thead>
+        <tr>
+          <th>Queue size</th>
+          <th>Positive episodes</th>
+          <th>Represented RT events</th>
+          <th>Official recall</th>
+          <th>Exact-start matches</th>
+          <th>Episode precision</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Top 20</td>
+          <td>12</td>
+          <td>60</td>
+          <td class="val-hi">43.48%</td>
+          <td>—</td>
+          <td class="val-dim">0.600</td>
+        </tr>
+        <tr>
+          <td>Top 50</td>
+          <td>20</td>
+          <td>97</td>
+          <td class="val-hi">70.29%</td>
+          <td>—</td>
+          <td class="val-dim">0.400</td>
+        </tr>
+        <tr>
+          <td>Top 100</td>
+          <td>28</td>
+          <td>126</td>
+          <td class="val-hi">91.30%</td>
+          <td>23</td>
+          <td class="val-dim">0.280</td>
+        </tr>
+        <tr>
+          <td>Top 500</td>
+          <td>31</td>
+          <td class="val-hi">138</td>
+          <td class="val-hi">100.00%</td>
+          <td>26</td>
+          <td class="val-dim">0.062</td>
+        </tr>
+        <tr>
+          <td>Top 1,000</td>
+          <td>31</td>
+          <td class="val-hi">138</td>
+          <td class="val-hi">100.00%</td>
+          <td>26</td>
+          <td class="val-dim">0.031</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>Official recall is computed from the deduplicated union of represented red-team event indices across the queue. Cluster debug annotation totals (which may double-count events attached to multiple episodes) are documented separately and labeled <em>debug_rt_event_annotation_total</em>. The delta between annotation totals and official recall is 2 events — a 1.5% annotation overlap — confirmed by v0.5.5 diagnostic.</p>
+
+    <div class="callout ok">
+      <span class="callout-label">Key finding</span>
+      The SRIA feature engine is valuable. The hand-written SRIA score is weak as a final ranker. The learned RF depth-10 ranker, trained with leakage-stripped features, recovered 100% of represented red-team events within the top 500 accepted-episode review queue. The hand score found zero represented red-team events in the top 1,000.
+    </div>
+  </section>
+
+  <!-- S6: LIMITATIONS -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-id">06</span>
+      <h2>Known limitations</h2>
+    </div>
+
+    <table class="status-table">
+      <tr>
+        <td>Review-queue ranking only, not deployment precision</td>
+        <td class="status-unknown">Metrics cover accepted episodes, not full enterprise background</td>
+      </tr>
+      <tr>
+        <td>Sparse-window evaluation constraint</td>
+        <td class="status-unknown">Evaluation used red-team time windows; broader negative-only evaluation needed</td>
+      </tr>
+      <tr>
+        <td>LANL-specific validation</td>
+        <td class="status-unknown">External dataset validation not yet performed</td>
+      </tr>
+      <tr>
+        <td>Negative-background false positive rate unknown</td>
+        <td class="status-unknown">How many high-scoring episodes appear per day in normal traffic is unknown</td>
+      </tr>
+      <tr>
+        <td>Model stability across splits</td>
+        <td class="status-unknown">RF depth-10 not yet tested across time-based or cross-branch splits</td>
+      </tr>
+      <tr>
+        <td>Interpretability tradeoff</td>
+        <td class="status-unknown">RF depth-10 outperforms but is less directly interpretable than depth-6 tree</td>
+      </tr>
+      <tr>
+        <td>Not full SRIA v3.0</td>
+        <td class="status-unknown">Semantic policy, delegation, and approval provenance layers not implemented</td>
+      </tr>
+      <tr>
+        <td>Adversary generalization</td>
+        <td class="status-unknown">Real attackers may use side channels, novel tooling, or insider access not modeled here</td>
+      </tr>
+    </table>
+  </section>
+
+  <!-- S7: WHAT REMAINS -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-id">07</span>
+      <h2>What remains to be done</h2>
+    </div>
+
+    <p>The most important next step is negative-background evaluation — running the pipeline against authentication traffic outside the sparse red-team windows to measure analyst burden in normal enterprise conditions. This is the question any serious reviewer will ask first and the one currently unanswered.</p>
+
+    <table class="status-table">
+      <tr><td>Negative-background evaluation</td><td class="status-unknown">→ Next priority</td></tr>
+      <tr><td>Cross-branch and time-based model stability testing</td><td class="status-future">→ Future work</td></tr>
+      <tr><td>Interpretable explanation layer paired with RF depth-10</td><td class="status-future">→ Future work</td></tr>
+      <tr><td>Stronger baselines (gradient boosting, graph neural models)</td><td class="status-future">→ Future work</td></tr>
+      <tr><td>External dataset validation</td><td class="status-future">→ Future work</td></tr>
+      <tr><td>Streaming mode integration for learned ranker</td><td class="status-future">→ Future work</td></tr>
+      <tr><td>Integration with broader SRIA v3.0 semantic policy layer</td><td class="status-future">→ Future work</td></tr>
+    </table>
+  </section>
+
+  <!-- S8: ARTIFACT STATUS -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-id">08</span>
+      <h2>Artifact status</h2>
+    </div>
+
+    <div class="artifact-list">
+      <div class="artifact-row">
+        <span class="artifact-name">SRIA LANL Feasibility Note v0.1 — Day 90 host/network</span>
+        <span class="artifact-status st-complete">Complete</span>
+      </div>
+      <div class="artifact-row">
+        <span class="artifact-name">SRIA LANL Feasibility Note v0.2 — Cross-day recurrence</span>
+        <span class="artifact-status st-complete">Complete</span>
+      </div>
+      <div class="artifact-row">
+        <span class="artifact-name">SRIA LANL Feasibility Note v0.3 — Auth red-team validation</span>
+        <span class="artifact-status st-complete">Complete</span>
+      </div>
+      <div class="artifact-row">
+        <span class="artifact-name">SRIA RT v0.3.3 full run</span>
+        <span class="artifact-status st-complete">Complete</span>
+      </div>
+      <div class="artifact-row">
+        <span class="artifact-name">SRIA RT v0.3.6 checkpointed batch run</span>
+        <span class="artifact-status st-complete">Complete</span>
+      </div>
+      <div class="artifact-row">
+        <span class="artifact-name">v0.4.1 clean leakage-stripped baseline</span>
+        <span class="artifact-status st-complete">Complete</span>
+      </div>
+      <div class="artifact-row">
+        <span class="artifact-name">v0.4.2 learned scorer export</span>
+        <span class="artifact-status st-complete">Complete</span>
+      </div>
+      <div class="artifact-row">
+        <span class="artifact-name">v0.4.3 queue audit</span>
+        <span class="artifact-status st-complete">Complete</span>
+      </div>
+      <div class="artifact-row">
+        <span class="artifact-name">v0.4.4 model comparison — RF depth-10 identified</span>
+        <span class="artifact-status st-complete">Complete</span>
+      </div>
+      <div class="artifact-row">
+        <span class="artifact-name">RF depth-10 analyst queues</span>
+        <span class="artifact-status st-preserved">Preserved</span>
+      </div>
+      <div class="artifact-row">
+        <span class="artifact-name">v0.5.0 offline learned-ranker application</span>
+        <span class="artifact-status st-complete">Complete</span>
+      </div>
+      <div class="artifact-row">
+        <span class="artifact-name">v0.5.1 deployment-style output separation</span>
+        <span class="artifact-status st-complete">Complete</span>
+      </div>
+      <div class="artifact-row">
+        <span class="artifact-name">v0.5.4 source-cluster analyst packaging</span>
+        <span class="artifact-status st-complete">Complete</span>
+      </div>
+      <div class="artifact-row">
+        <span class="artifact-name">v0.5.5 debug annotation diagnostic</span>
+        <span class="artifact-status st-complete">Complete</span>
+      </div>
+      <div class="artifact-row">
+        <span class="artifact-name">Negative-background evaluation</span>
+        <span class="artifact-status st-next">Next</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- S9: CITATION -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-id">09</span>
+      <h2>Dataset citation</h2>
+    </div>
+    <p style="font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); line-height: 1.6;">
+      Turcotte, M. J. M., Kent, A. D., &amp; Hash, C. (2018). Unified Host and Network Data Set.<br>
+      In <em>Data Science for Cyber-Security</em> (pp. 1–22). World Scientific.<br>
+      DOI: 10.1142/9781786345646_001
+    </p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <span>SRIA RT System Card — v0.5.5</span>
+    <span>Maysam Bayg Muhammady / AWOS AI</span>
+    <span>June 2026</span>
+    <span style="color:var(--warn)">Research prototype — not for deployment</span>
+  </footer>
+
+</div>
+</body>
+</html>
