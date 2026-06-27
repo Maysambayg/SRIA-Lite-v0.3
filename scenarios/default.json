@@ -1,0 +1,80 @@
+{
+  "policy": {
+    "role_actions": {
+      "analyst": ["read", "export"],
+      "engineer": ["read", "deploy"],
+      "admin": ["read", "deploy", "delete", "grant_admin"],
+      "auditor": ["read", "audit"]
+    },
+    "role_resources": {
+      "analyst": ["reports", "metrics"],
+      "engineer": ["service_a", "service_b"],
+      "admin": ["*"],
+      "auditor": ["reports", "logs"]
+    },
+    "frozen_resources": ["service_b"],
+    "required_approval_actions": ["deploy", "delete", "export", "grant_admin"],
+    "active_approvals": ["APPROVAL-123"],
+    "active_delegations": ["DEL-OK"]
+  },
+  "baseline_events": [
+    {"actor": "alice", "role": "analyst", "action": "read", "resource": "reports", "device_id": "laptop_1", "source_ip": "10.0.0.2"},
+    {"actor": "alice", "role": "analyst", "action": "export", "resource": "reports", "approval_id": "APPROVAL-123", "device_id": "laptop_1", "source_ip": "10.0.0.2"},
+    {"actor": "bob", "role": "engineer", "action": "read", "resource": "service_a", "device_id": "laptop_2", "source_ip": "10.0.0.3"},
+    {"actor": "bob", "role": "engineer", "action": "read", "resource": "service_a", "device_id": "laptop_2", "source_ip": "10.0.0.3"},
+    {"actor": "dina", "role": "auditor", "action": "audit", "resource": "logs", "device_id": "dina_laptop", "source_ip": "10.0.0.30"}
+  ],
+  "events": [
+    {
+      "label": "normal_analyst_read",
+      "actor": "alice",
+      "role": "analyst",
+      "action": "read",
+      "resource": "reports",
+      "device_id": "laptop_1",
+      "source_ip": "10.0.0.2"
+    },
+    {
+      "label": "unauthorized_analyst_delete",
+      "actor": "alice",
+      "role": "analyst",
+      "action": "delete",
+      "resource": "reports",
+      "resource_criticality": 0.70,
+      "device_id": "laptop_1",
+      "source_ip": "10.0.0.2"
+    },
+    {
+      "label": "engineer_deploy_during_freeze",
+      "actor": "bob",
+      "role": "engineer",
+      "action": "deploy",
+      "resource": "service_b",
+      "resource_criticality": 0.90,
+      "approval_id": "APPROVAL-123",
+      "mission_state": "freeze",
+      "device_id": "laptop_2",
+      "source_ip": "10.0.0.3"
+    },
+    {
+      "label": "critical_admin_grant_unfamiliar_context",
+      "actor": "carol",
+      "role": "admin",
+      "action": "grant_admin",
+      "resource": "identity",
+      "resource_criticality": 1.00,
+      "device_id": "unknown_device",
+      "source_ip": "203.0.113.10"
+    },
+    {
+      "label": "known_engineer_new_device",
+      "actor": "bob",
+      "role": "engineer",
+      "action": "read",
+      "resource": "service_a",
+      "resource_criticality": 0.60,
+      "device_id": "new_device",
+      "source_ip": "10.0.0.99"
+    }
+  ]
+}
